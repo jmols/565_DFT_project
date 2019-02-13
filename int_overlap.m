@@ -4,16 +4,18 @@ function S = int_overlap(basis)
 %   elements), and calculates the overlap integrals (MxM matrix).
 
 M=numel(basis); % number of basis functions
+S = zeros(M,M); % to pre-allocate the MxM grid
 for u=1:M
-    for v=u:M
-        s=0;
+    for v=u:M %to fill the MxM grid
         for k=1:numel(basis(u).d)
-            for l=1:numel(basis(v).d)
-                s=s+basis(u).d(k)*basis(v).d(l)*basis(u).N(k)*basis(v).N(l)*overlap_primitive(basis(u).a,basis(v).a,basis(u).alpha(k),basis(v).alpha(l),basis(u).A,basis(v).A);
+            for l=1:numel(basis(v).d) % to account for the contractions
+                % add up the overlaps to account for the contracted basis
+                S(u,v)=S(u,v)+basis(u).d(k)*basis(v).d(l)*basis(u).N(k)...
+                    *basis(v).N(l)*overlap_primitive(basis(u).a,basis(v).a,...
+                    basis(u).alpha(k),basis(v).alpha(l),basis(u).A,basis(v).A);
             end
         end
-        S(u,v)=s;
-        S(v,u)=s;
+        S(v,u) = S(u,v);
     end
 end
 end
