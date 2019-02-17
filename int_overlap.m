@@ -15,7 +15,7 @@ for u=1:M
                     basis(u).alpha(k),basis(v).alpha(l),basis(u).A,basis(v).A);
             end
         end
-        S(v,u) = S(u,v);
+        S(v,u) = S(u,v); %to fill the remaining half
     end
 end
 end
