@@ -9,7 +9,8 @@ function Sp = overlap_primitive(a,b,alpha,beta,A,B)
 
 K_AB=exp(-(alpha*beta/(alpha+beta))*((norm(A-B))^2)); % K_AB from equation (26).
 p=alpha+beta; % p from equation (27).
-P=(A.*alpha+B.*beta)/(alpha+beta); % P: the weighted midpoint between the two centers A and B, from equation (28).
+% P: the weighted midpoint between the two centers A and B, from equation (28).
+P=(A.*alpha+B.*beta)/(alpha+beta); 
 
 Sp=((pi/p)^(3/2))*K_AB;
 for i=1:3

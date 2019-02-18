@@ -1,38 +1,36 @@
-function basis = buildbasis(atoms,xyz_a0,basissetdef)
-%Function buildbasis 
-%   It takes a list of atoms and their coordinates (xyz_a0), and the basis
-%   set information read in by basisread, and generates a full list of
-%   basis functions for a given molecule.
+function [basis] = buildbasis(atoms,xyz_a0,basissetdef)
+%Builds a basisset given atoms, their cartesian coordinates, and the method
+num = length(atoms);
+p = 1;
 
-count=0;
-for i=1:numel(atoms)
-    for j=1:numel(basissetdef{atoms(i)})
-        if basissetdef{atoms(i)}(j).shelltype=='S'
+for i = 1:num %iterate over the list of atoms in atoms
+    %iterate over the number of basis functions for each atom 
+    for n = 1:length(basissetdef{atoms(i)})
+        if basissetdef{atoms(i)}(n).shelltype == 'S'
             a=[0 0 0];
-            d_row=1; % help to determine the contraction coefficients
-        elseif basissetdef{atoms(i)}(j).shelltype=='P'
+            d_row=1; % factor to help determine the contraction coefficients
+        elseif basissetdef{atoms(i)}(n).shelltype=='P'
             a=[1 0 0;0 1 0;0 0 1];
             d_row=0;
-        elseif basissetdef{atoms(i)}(j).shelltype=='SP'
+        elseif basissetdef{atoms(i)}(n).shelltype=='SP'
             a=[0 0 0;1 0 0;0 1 0;0 0 1];
             d_row=1;
-        elseif basissetdef{atoms(i)}(j).shelltype=='D'
+        elseif basissetdef{atoms(i)}(n).shelltype=='D'
             a=[2 0 0;1 1 0;1 0 1;0 2 0;0 1 1;0 0 2];
             d_row=-1;
         end
-        for p=1:numel(a(:,1))
-            count=count+1;
-            nbf.atom=atoms(i); % element number
-            nbf.A=xyz_a0(i,:); % vector of Cartesian coordinates of the nucleus, in bohr
-            nbf.a=a(p,:); % vector of Cartesian exponents ([0 0 0] for s, [1 0 0] for px, etc.)
-            nbf.alpha=basissetdef{atoms(i)}(j).exponents; % array of radial exponents of primitives, in inverse bohr
-            nbf.d=basissetdef{atoms(i)}(j).coeffs(sum(nbf.a)+d_row,:); % array of contraction coefficients
-            nbf.N=0;
-            for k=1:numel(basissetdef{atoms(i)}(j).exponents)
-                nbf.N(k)=((2/pi)^(3/4)*(2^sum(a(p,:)))*(basissetdef{atoms(i)}(j).exponents(k)^((2*sum(a(p,:))+3)/4)))/sqrt(fac2(2*a(p,1)-1)*fac2(2*a(p,2)-1)*fac2(2*a(p,3)-1));
-            end% normalization constants
-            basis(count)=nbf;
+        for q = 1:length(a(:,1))
+            basis(p).atom = atoms(i); %puts the atom number in .atoms
+            basis(p).A = xyz_a0(i, :); %puts the nuclear coordinates in .xyz_a0
+            basis(p).a = a(q,:); %adds the cartesian exponents for the specific shell
+            basis(p).alpha = basissetdef{atoms(i)}(n).exponents; %pulls the alphas from basissetdef
+            basis(p).d = basissetdef{atoms(i)}(n).coeffs(sum(basis(p).a)+d_row,:); 
+       %pulls the d_ks from basissetdef by using that d_row from earlier
+            basis(p).N = Norm(basis(p).a(1),basis(p).a(2),basis(p).a(3),basis(p).alpha);
+            %the above calulates the N_ks from my Norm function and this line iterates the count
+            p = p+1;
         end
-    end 
+    end
 end
 end
+
