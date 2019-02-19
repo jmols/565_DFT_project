@@ -39,7 +39,7 @@ P=(A.*alpha+B.*beta)/(alpha+beta); % P: the weighted midpoint between the two ce
 BOYS=0; % boys function will be different for each P{A(u),B(v),alpha(k),beta(l)},C and m values.
 m_max=sum(a)+sum(b);
 T=p*((norm(P-C))^2);
-disp(T);
+
 for i=1:m_max+1
     BOYS(i)=boysF(i-1,T);
 end
