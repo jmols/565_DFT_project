@@ -24,7 +24,8 @@ isosurface(x,y,z,Psi,-level)
 xlabel('r (a0)')
 ylabel('r (a0)')
 zlabel('r (a0)')
-title(['MO ',num2str(iMO), ' with Energy = ',num2str(out.Etot),' Hatrees at isolevel = ',num2str(level)])
+title(['MO ',num2str(iMO), ' with Energy = ',num2str(out.Etot),...
+    ' Hatrees at isolevel = ',num2str(level),' (a_0^-^3^/^2)'])
 hold off
 
 %Visualization settings
