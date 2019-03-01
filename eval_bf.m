@@ -1,6 +1,6 @@
 function val = eval_bf(basisfun,xyz_a0)
 %Returns an m element array of the basis function evaluated at m positions
-%in space given a basisfunctiona and an mx3 array of positions
+%in space given a basisfunction and an mx3 array of positions
 
 points = numel(xyz_a0(:,1)); %determine the amount of positions
 contractions = numel(basisfun.d); %determine the amount of primitives in
